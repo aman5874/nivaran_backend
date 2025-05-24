@@ -34,3 +34,4 @@ Add base API endpoints for symptom checker at 2025-05-24T16:59:23Z
 Rewrite README with updated onboarding steps at 2025-05-24T16:19:07Z
 Improve input validation in symptom checker at 2025-05-24T20:35:35Z
 Update .env.example with new GCP key vars at 2025-05-25T08:07:17Z
+Add unit tests for prompt interpreter at 2025-05-24T14:21:24Z

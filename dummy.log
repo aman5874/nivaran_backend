@@ -30,3 +30,4 @@ Add fallback to teleconsult if AI triage uncertain at 2025-05-24T17:06:08Z
 Rewrite README with updated onboarding steps at 2025-05-24T13:02:14Z
 Optimize MongoDB queries in patient record fetch at 2025-05-25T08:25:48Z
 Initial data schema setup for patient records at 2025-05-24T01:13:20Z
+Add base API endpoints for symptom checker at 2025-05-24T16:59:23Z

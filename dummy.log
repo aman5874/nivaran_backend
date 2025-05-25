@@ -25,3 +25,4 @@ Improve error handling in AI module at 2025-05-24T15:39:11Z
 Fix Dockerfile for alpine compatibility at 2025-05-25T07:35:37Z
 Fix Dockerfile for alpine compatibility at 2025-05-25T06:42:37Z
 Refactor health summary generation logic at 2025-05-25T04:44:14Z
+Improve input validation in symptom checker at 2025-05-25T06:00:46Z

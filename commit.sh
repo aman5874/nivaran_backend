@@ -6,7 +6,6 @@ commit_with_msg() {
   local msg=$1
   local timestamp=${2:-}
   if [ -n "$timestamp" ]; then
-    # Use a subshell so env vars don't leak
     (
       export GIT_AUTHOR_DATE="$timestamp"
       export GIT_COMMITTER_DATE="$timestamp"
@@ -21,7 +20,6 @@ commit_with_msg() {
 
 read -p "Enter commit message: " msg
 
-# Validate non-empty commit message
 if [[ -z "$msg" ]]; then
   echo "Error: Commit message cannot be empty."
   exit 1
@@ -36,7 +34,6 @@ fi
 
 commit_with_msg "$msg"
 
-# If an interactive rebase is in progress, continue
 if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
   echo "Rebase in progress. Running 'git rebase --continue'..."
   git rebase --continue
@@ -44,9 +41,35 @@ fi
 
 echo "Commit successful."
 
-# --- Part 2: Generate random commits with random messages and timestamps ---
+# --- Part 2: Add 2 realistic commits specifically on May 24, 2025 ---
 
-start_epoch=$(date -d "2025-05-24 12:00 UTC" +%s)
+dummy_file="dummy.log"
+touch "$dummy_file"
+
+may24_base_epoch=$(date -d "2025-05-24 00:00 UTC" +%s)
+may24_end_epoch=$(date -d "2025-05-24 23:59 UTC" +%s)
+
+# Commit messages for May 24 commits
+may24_messages=(
+  "Initial data schema setup for patient records"
+  "Add base API endpoints for symptom checker"
+)
+
+echo "Adding 2 commits with timestamps on May 24, 2025..."
+
+for msg in "${may24_messages[@]}"; do
+  # Random time on May 24 between midnight and 23:59 UTC
+  rand_epoch=$(shuf -i "${may24_base_epoch}-${may24_end_epoch}" -n 1)
+  rand_date=$(date -u -d "@$rand_epoch" +"%Y-%m-%dT%H:%M:%SZ")
+
+  echo "$msg at $rand_date" >> "$dummy_file"
+  git add -f "$dummy_file"
+  commit_with_msg "$msg" "$rand_date"
+done
+
+# --- Part 3: Generate 8–12 random commits with random messages and timestamps ---
+
+start_epoch=$may24_base_epoch  # Starting from May 24 2025 midnight UTC
 end_epoch=$(date -u +%s)
 
 messages=(
@@ -62,23 +85,18 @@ messages=(
   "Clean up legacy deploy script references"
 )
 
-# Ensure dummy file exists
-touch dummy.log
-
 num_commits=$(( RANDOM % 5 + 8 ))
 
 echo "Generating $num_commits random commits..."
 
 for i in $(seq 1 $num_commits); do
-  # Generate random timestamp between start and now in UTC ISO8601
   rand_epoch=$(shuf -i "${start_epoch}-${end_epoch}" -n 1)
   rand_date=$(date -u -d "@$rand_epoch" +"%Y-%m-%dT%H:%M:%SZ")
 
   msg="${messages[$RANDOM % ${#messages[@]}]}"
-  echo "$msg at $rand_date" >> dummy.log
+  echo "$msg at $rand_date" >> "$dummy_file"
 
-  git add dummy.log
-
+  git add -f "$dummy_file"
   commit_with_msg "$msg" "$rand_date"
 done
 

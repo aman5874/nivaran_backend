@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+openai
+python-dotenv>=1.0.0
+sse-starlette
+slowapi
+httpx
+python-multipart
+pinecone[grpc]>=6.0.2
+numpy>=1.24.0
+google-genai
+redis
+aiohttp
